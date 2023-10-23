@@ -1,0 +1,44 @@
+{
+  "name": "samplerepository",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "devDependencies": {
+    "@mdi/font": "5.9.55",
+    "axios": "^1.4.0",
+    "core-js": "^3.8.3",
+    "pinia": "^2.1.4",
+    "roboto-fontface": "*",
+    "vue": "^3.2.13",
+    "vue-router": "^4.0.3",
+    "vuetify": "^3.0.0-beta.0",
+    "webfontloader": "^1.0.0",
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "vue-cli-plugin-pinia": "~0.2.4",
+    "vue-cli-plugin-vuetify": "~2.5.8",
+    "webpack-plugin-vuetify": "^2.0.0-alpha.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yamamoto1028/SampleRepository.git"
+  },
+  "author": "YamamotoShuhei",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yamamoto1028/SampleRepository/issues"
+  },
+  "homepage": "https://github.com/yamamoto1028/SampleRepository#readme"
+}
