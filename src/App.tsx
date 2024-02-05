@@ -1,8 +1,6 @@
-import React from "react";
+import React ,{ useState } from "react";
 import "./App.css";
 import { BookToRead } from "./BookToRead";
-
-//インポート文追加
 import BookRow from "./BookRow";
 
 const dummyBooks: BookToRead[] = [
@@ -27,17 +25,33 @@ const dummyBooks: BookToRead[] = [
 ];
 
 const App = () => {
-  const bookRows = dummyBooks.map((b) => {
+  const [books, setBooks] = useState(dummyBooks);
+
+const handleBookMemoChange = (id: number, memo: string) => {
+      const newBooks = books.map((b) => {
+        return b.id === id
+        ? { ...b, memo: memo } : b;
+    });
+      setBooks(newBooks);
+    }
+
+const handleBookDelete = (id: number) => {
+    const newBooks = books.filter((b) => b.id !== id);
+    setBooks(newBooks);
+  };
+
+  const bookRows = books.map((b) => {
     return (
       <BookRow
         book={b}
         key={b.id}
-        onMemoChange={(id, memo) => {}}
-        onDelete={(id) => {}}
+        onMemoChange={(id, memo) => {handleBookMemoChange(id, memo)}}
+        onDelete={(id) => {handleBookDelete(id);}}//書籍を削除するやつ
       />
     );
   });
-  
+    
+
   return (
     <div className="App">
       <section className="nav">
@@ -47,6 +61,6 @@ const App = () => {
       <section className="main">{bookRows}</section>
     </div>
   );
-};
-
+  }
 export default App;
+
