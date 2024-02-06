@@ -6,40 +6,37 @@ import BookRow from "./BookRow";
 const dummyBooks: BookToRead[] = [
   {
     id: 1,
-    title: "はじめてのReact",
-    authors: "ダミー",
+    title: "はじめてのうめちゃん",
+    authors: "ジミー",
     memo: ""
   },
   {
     id: 2,
-    title: "React Hooks入門",
-    authors: "ダミー",
+    title: "やまだのてほどき入門",
+    authors: "ヤミー",
     memo: ""
   },
   {
     id: 3,
-    title: "実践Reactアプリケーション開発",
-    authors: "ダミー",
+    title: "やぎまのちょめちょめ開発",
+    authors: "ヒジー",
     memo: ""
   }
 ];
 
 const App = () => {
   const [books, setBooks] = useState(dummyBooks);
-
-const handleBookMemoChange = (id: number, memo: string) => {
-      const newBooks = books.map((b) => {
-        return b.id === id
-        ? { ...b, memo: memo } : b;
-    });
+  const handleBookMemoChange = (id: number, memo: string) => {
+        const newBooks = books.map((b) => {
+          return b.id === id
+          ? { ...b, memo: memo } : b;
+        });
+        setBooks(newBooks);
+      }
+  const handleBookDelete = (id: number) => {
+      const newBooks = books.filter((b) => b.id !== id);
       setBooks(newBooks);
-    }
-
-const handleBookDelete = (id: number) => {
-    const newBooks = books.filter((b) => b.id !== id);
-    setBooks(newBooks);
-  };
-
+    };
   const bookRows = books.map((b) => {
     return (
       <BookRow
@@ -50,7 +47,6 @@ const handleBookDelete = (id: number) => {
       />
     );
   });
-    
 
   return (
     <div className="App">
@@ -61,6 +57,6 @@ const handleBookDelete = (id: number) => {
       <section className="main">{bookRows}</section>
     </div>
   );
-  }
+}
 export default App;
 
