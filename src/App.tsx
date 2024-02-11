@@ -12,7 +12,7 @@ const dummyBooks: BookToRead[] = [
   },
   {
     id: 2,
-    title: "やまだのてほどき入門",
+    title: "やまだJPのてほどき入門",
     authors: "ヤミー",
     memo: ""
   },
