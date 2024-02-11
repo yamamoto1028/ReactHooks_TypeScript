@@ -18,7 +18,7 @@ const dummyBooks: BookToRead[] = [
   },
   {
     id: 3,
-    title: "やぎまのちょめちょめ開発",
+    title: "やぎまさとのちょめちょめ開発",
     authors: "ヒジー",
     memo: ""
   }
