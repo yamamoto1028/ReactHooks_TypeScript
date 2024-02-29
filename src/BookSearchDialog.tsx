@@ -13,11 +13,22 @@ function buildSearchUrl(title: string, author: string, maxResults: number): stri
   }
   return url + conditions.join('+') + `&maxResults=${maxResults}`;
 }
+interface VolumeInfo {
+  title: string;
+  authors?: string[];
+  imageLinks?: {
+    smallThumbnail: string;
+  };
+}
 
-function extractBooks(json: any): BookDescription[] {
-  const items: any[] = json.items;
-  return items.map((item: any) => {
-    const volumeInfo: any = item.volumeInfo;
+interface Item {
+  volumeInfo: VolumeInfo;
+}
+
+function extractBooks(json: {items: Item[]}): BookDescription[] {
+  const items: Item[] = json.items;
+  return items.map((item: Item) => {
+    const volumeInfo: VolumeInfo = item.volumeInfo;
     return {
       title: volumeInfo.title,
       authors: volumeInfo.authors ? volumeInfo.authors.join(', ') : "",
@@ -40,25 +51,23 @@ const BookSearchDialog = (props: BookSearchDialogProps) => {
   const [isSearching, setIsSearching] = useState(false);
 
 //副作用の実装
-  useEffect(() => {
-    if (isSearching) {
-      const url = buildSearchUrl(title, author, props.maxResults);
-      fetch(url)
-        .then((res) => {
-          return res.json();
-        })
-        .then((json) => {
-          return extractBooks(json);
-        })
-        .then((books) => {
-          setBooks(books);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-    setIsSearching(false);
-  }, [isSearching]);
+useEffect(() => {
+  if (isSearching) {
+    const url = buildSearchUrl(title, author, props.maxResults);
+    fetch(url)
+      .then(res => res.json())
+      .then(json => {
+        const books = extractBooks(json);
+        setBooks(books);
+      })
+      .catch(err => {
+        console.error(err);
+      })
+      .finally(() => {
+        setIsSearching(false);
+      });
+  }
+}, [isSearching, title, author, props.maxResults]);
 
   //イベントハンドラのコールバック関数
   const handleTitleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,7 +96,7 @@ const BookSearchDialog = (props: BookSearchDialogProps) => {
     return (
       <BookSearchItem
         description={b}
-        onBookAdd={(b) => handleBookAdd(b)}
+        onBookAdd={handleBookAdd}
         key={idx}
       />
     );
