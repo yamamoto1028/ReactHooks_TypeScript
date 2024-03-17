@@ -1,11 +1,10 @@
-import React ,{ useState } from "react";
+import React ,{ useState, useEffect} from "react";
 import "./App.css";
 import { BookToRead } from "./BookToRead";
 import BookRow from "./BookRow";
 import Modal from "react-modal";
 import BookSearchDialog from "./BookSearchDialog";
 import {BookDescription} from "./BookDescription";
-
 
 Modal.setAppElement("#root");//モーダル表示時にオーバーレイで覆うDOM領域を指定
 
@@ -24,6 +23,7 @@ const customStyles = {//モーダルダイアログおよびオーバーレイ�
   }
 };
 
+const APP_KEY = "react-hooks-tutorial"
 // const dummyBooks: BookToRead[] = [
 //   {
 //     id: 1,
@@ -45,21 +45,33 @@ const customStyles = {//モーダルダイアログおよびオーバーレイ�
 //   }
 // ];
 
-
 const App = () => {
   const [books, setBooks] = useState([] as BookToRead[]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  useEffect(() => {
+    const storedBooks = localStorage.getItem(APP_KEY);
+    if (storedBooks) {
+      setBooks(JSON.parse(storedBooks));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(APP_KEY, JSON.stringify(books));
+  }, [books]);
+  
   const handleBookMemoChange = (id: number, memo: string) => {
         const newBooks = books.map((b) => {
           return b.id === id
           ? { ...b, memo: memo } : b;
         });
         setBooks(newBooks);
-      }
+      };
+
   const handleBookDelete = (id: number) => {
       const newBooks = books.filter((b) => b.id !== id);
       setBooks(newBooks);
     };
+
   const bookRows = books.map((b) => {
     return (
       <BookRow
@@ -70,6 +82,7 @@ const App = () => {
       />
     );
   });
+
   const handleAddClick = () => {
     setModalIsOpen(true);
   };
@@ -82,7 +95,10 @@ const App = () => {
     const newBooks = [...books, newBook];
     setBooks(newBooks);
     setModalIsOpen(false);
-  }
+  };
+  
+
+  
   return (
     <div className="App">
       <section className="nav">
