@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { BookDescription } from "./BookDescription";
 import BookSearchItem from "./BookSearchItem";
 
@@ -46,14 +46,16 @@ type BookSearchDialogProps = {
 //useState変数を使ってステート変数を定義
 const BookSearchDialog = (props: BookSearchDialogProps) => {
   const [books, setBooks] = useState([] as BookDescription[]);//書籍の検索結果を表す配列
-  const [title, setTitle] = useState("");//検索条件のタイトル（初期値は空の文字列）
-  const [author, setAuthor] = useState("");//検索結果の著者名（初期値は空の文字列）
+  // const [title, setTitle] = useState("");//検索条件のタイトル（初期値は空の文字列）
+  // const [author, setAuthor] = useState("");//検索結果の著者名（初期値は空の文字列）
+  const titleRef = useRef<HTMLInputElement>(null);
+  const authorRef = useRef<HTMLInputElement>(null);
   const [isSearching, setIsSearching] = useState(false);
 
 //副作用の実装
 useEffect(() => {
   if (isSearching) {
-    const url = buildSearchUrl(title, author, props.maxResults);
+    const url = buildSearchUrl(titleRef.current!.value, authorRef.current!.value, props.maxResults);
     fetch(url)
       .then(res => res.json())
       .then(json => {
@@ -67,19 +69,19 @@ useEffect(() => {
         setIsSearching(false);
       });
   }
-}, [isSearching, title, author, props.maxResults]);
+}, [isSearching]);
 
   //イベントハンドラのコールバック関数
-  const handleTitleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-  };
-  const handleAuthorInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAuthor(e.target.value);
-  };
+  // const handleTitleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setTitle(e.target.value);
+  // };
+  // const handleAuthorInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setAuthor(e.target.value);
+  // };
 
   //検索ボタンのクリックイベントをハンドリングするコールバックの定義
   const handleSearchClick = () => {
-    if (!title && !author) {
+    if (!titleRef.current!.value && !authorRef.current!.value) {
       alert("条件を入力してください");
       return;
     }
@@ -107,12 +109,12 @@ useEffect(() => {
         <div className="conditions">
           <input
             type="text"
-            onChange={handleTitleInputChange}
+            ref={titleRef}
             placeholder="タイトルで検索"
           />
           <input
             type="text"
-            onChange={handleAuthorInputChange}
+            ref={authorRef}
             placeholder="著者名で検索"
           />
         </div>
