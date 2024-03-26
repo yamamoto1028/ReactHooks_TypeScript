@@ -6,7 +6,6 @@ import Modal from "react-modal";
 import BookSearchDialog from "./BookSearchDialog";
 import {BookDescription} from "./BookDescription";
 
-
 Modal.setAppElement("#root");//モーダル表示時にオーバーレイで覆うDOM領域を指定
 
 const customStyles = {//モーダルダイアログおよびオーバーレイの外観のスタイル設定
@@ -24,29 +23,7 @@ const customStyles = {//モーダルダイアログおよびオーバーレイ�
   }
 };
 
-// const dummyBooks: BookToRead[] = [
-//   {
-//     id: 1,
-//     title: "はじめてのうめちゃん",
-//     authors: "ジミー",
-//     memo: ""
-//   },
-//   {
-//     id: 2,
-//     title: "やまだJPのてほどき入門",
-//     authors: "ヤミー",
-//     memo: ""
-//   },
-//   {
-//     id: 3,
-//     title: "やぎまさとのちょめちょめ開発",
-//     authors: "ヒジー",
-//     memo: ""
-//   }
-// ];
-
 const APP_KEY = "react-hooks-tutorial"
-
 
 const App = () => {
   const [books, setBooks] = useState([] as BookToRead[]);
