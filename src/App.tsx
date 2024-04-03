@@ -24,36 +24,20 @@ const customStyles = {//モーダルダイアログおよびオーバーレイ�
 };
 
 const APP_KEY = "react-hooks-tutorial"
-// const dummyBooks: BookToRead[] = [
-//   {
-//     id: 1,
-//     title: "はじめてのうめちゃん",
-//     authors: "ジミー",
-//     memo: ""
-//   },
-//   {
-//     id: 2,
-//     title: "やまだJPのてほどき入門",
-//     authors: "ヤミー",
-//     memo: ""
-//   },
-//   {
-//     id: 3,
-//     title: "やぎまさとのちょめちょめ開発",
-//     authors: "ヒジー",
-//     memo: ""
-//   }
-// ];
+
 
 const App = () => {
   const [books, setBooks] = useState([] as BookToRead[]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+
   useEffect(() => {
     const storedBooks = localStorage.getItem(APP_KEY);
     if (storedBooks) {
       setBooks(JSON.parse(storedBooks));
     }
   }, []);
+  
 
   useEffect(() => {
     localStorage.setItem(APP_KEY, JSON.stringify(books));

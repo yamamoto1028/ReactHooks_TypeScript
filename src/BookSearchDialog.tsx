@@ -1,41 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
-import { BookDescription } from "./BookDescription";
+import React, { useState, useRef } from "react";
+import { BookDescription } from './BookDescription'
 import BookSearchItem from "./BookSearchItem";
-
-function buildSearchUrl(title: string, author: string, maxResults: number): string {
-  let url = "https://www.googleapis.com/books/v1/volumes?q=";
-  const conditions: string[] = []
-  if (title) {
-    conditions.push(`intitle:${title}`);
-  }
-  if (author) {
-    conditions.push(`inauthor:${author}`);
-  }
-  return url + conditions.join('+') + `&maxResults=${maxResults}`;
-}
-interface VolumeInfo {
-  title: string;
-  authors?: string[];
-  imageLinks?: {
-    smallThumbnail: string;
-  };
-}
-
-interface Item {
-  volumeInfo: VolumeInfo;
-}
-
-function extractBooks(json: {items: Item[]}): BookDescription[] {
-  const items: Item[] = json.items;
-  return items.map((item: Item) => {
-    const volumeInfo: VolumeInfo = item.volumeInfo;
-    return {
-      title: volumeInfo.title,
-      authors: volumeInfo.authors ? volumeInfo.authors.join(', ') : "",
-      thumbnail: volumeInfo.imageLinks ? volumeInfo.imageLinks.smallThumbnail : "",
-    }
-  });
-}
+import { useBookData } from "./useBookData";
 
 type BookSearchDialogProps = {
   maxResults: number;//検索結果の表示最大件数
@@ -45,39 +11,12 @@ type BookSearchDialogProps = {
 //コンポーネント本体の関数を定義
 //useState変数を使ってステート変数を定義
 const BookSearchDialog = (props: BookSearchDialogProps) => {
-  const [books, setBooks] = useState([] as BookDescription[]);//書籍の検索結果を表す配列
-  // const [title, setTitle] = useState("");//検索条件のタイトル（初期値は空の文字列）
-  // const [author, setAuthor] = useState("");//検索結果の著者名（初期値は空の文字列）
   const titleRef = useRef<HTMLInputElement>(null);
   const authorRef = useRef<HTMLInputElement>(null);
-  const [isSearching, setIsSearching] = useState(false);
-
-//副作用の実装
-useEffect(() => {
-  if (isSearching) {
-    const url = buildSearchUrl(titleRef.current!.value, authorRef.current!.value, props.maxResults);
-    fetch(url)
-      .then(res => res.json())
-      .then(json => {
-        const books = extractBooks(json);
-        setBooks(books);
-      })
-      .catch(err => {
-        console.error(err);
-      })
-      .finally(() => {
-        setIsSearching(false);
-      });
-  }
-}, [isSearching]);
-
-  //イベントハンドラのコールバック関数
-  // const handleTitleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setTitle(e.target.value);
-  // };
-  // const handleAuthorInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setAuthor(e.target.value);
-  // };
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState(""); 
+  
+  const books = useBookData(title, author, props.maxResults);
 
   //検索ボタンのクリックイベントをハンドリングするコールバックの定義
   const handleSearchClick = () => {
@@ -85,7 +24,8 @@ useEffect(() => {
       alert("条件を入力してください");
       return;
     }
-    setIsSearching(true);
+    setTitle(titleRef.current!.value);
+    setAuthor(authorRef.current!.value);
   };
 
   //書籍追加イベントに対するコールバック
