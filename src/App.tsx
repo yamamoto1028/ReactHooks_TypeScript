@@ -25,9 +25,11 @@ const customStyles = {//モーダルダイアログおよびオーバーレイ�
 
 const APP_KEY = "react-hooks-tutorial"
 
+
 const App = () => {
   const [books, setBooks] = useState([] as BookToRead[]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
 
   useEffect(() => {
     const storedBooks = localStorage.getItem(APP_KEY);
@@ -36,6 +38,7 @@ const App = () => {
     }
   }, []);
   
+
   useEffect(() => {
     localStorage.setItem(APP_KEY, JSON.stringify(books));
   }, [books]);
@@ -46,11 +49,13 @@ const App = () => {
           ? { ...b, memo: memo } : b;
         });
         setBooks(newBooks);
-      }
+      };
+
   const handleBookDelete = (id: number) => {
       const newBooks = books.filter((b) => b.id !== id);
       setBooks(newBooks);
     };
+
   const bookRows = books.map((b) => {
     return (
       <BookRow
@@ -61,6 +66,7 @@ const App = () => {
       />
     );
   });
+
   const handleAddClick = () => {
     setModalIsOpen(true);
   };
@@ -73,7 +79,10 @@ const App = () => {
     const newBooks = [...books, newBook];
     setBooks(newBooks);
     setModalIsOpen(false);
-  }
+  };
+  
+
+  
   return (
     <div className="App">
       <section className="nav">
